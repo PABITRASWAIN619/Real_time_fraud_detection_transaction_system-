@@ -1,0 +1,244 @@
+.signup-container {
+  display: flex;
+  width: 85vw;
+  height: 85vh;
+  margin: 5vh auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  font-family: "Poppins", sans-serif;
+  transform: translateY(15px);
+}
+
+/* ===== Left Image Section ===== */
+.signup-left {
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.image-slider {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  z-index: 2;
+}
+
+.img-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.45);
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  z-index: 3;
+}
+
+.img-overlay h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.img-overlay p {
+  font-size: 0.95rem;
+}
+
+/* ===== Right Form Section ===== */
+.signup-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a1e3fc, #d1f8ef);
+}
+
+.signup-box {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 80%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.6s ease-out;
+}
+
+.signup-box h2 {
+  color: #3674b5;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Input Fields ===== */
+input {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: #3674b5;
+  box-shadow: 0 0 6px #a1e3fc;
+}
+
+/* ===== Password Section ===== */
+.password-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 1px;
+  top: 12px;
+  cursor: pointer;
+  color: #3674b5;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 3px;
+  opacity: 0;
+  animation: fadeInError 0.4s forwards;
+}
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Button & Text ===== */
+.register-btn {
+  background: linear-gradient(90deg, #3674b5, #578fca);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.register-btn:hover {
+  background: #2f63a4;
+}
+
+.login-text {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.8rem;
+}
+
+.login-text a {
+  color: #3674b5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .signup-container {
+    flex-direction: column;
+    width: 90vw;
+    height: auto;
+  }
+
+  .signup-left {
+    height: 200px;
+  }
+
+  .signup-right {
+    padding: 2rem 1rem;
+  }
+
+  .signup-box {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   💫 Modern Background & Glass Effect
+========================================= */
+body {
+  background: radial-gradient(circle at top left, #1b2a49, #0f2027, #203a43, #2c5364);
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

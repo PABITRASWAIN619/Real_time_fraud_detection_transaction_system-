@@ -1,0 +1,4 @@
+npm init -y
+npm install express mongoose cors dotenv body-parser bcryptjs
+RemoveItem -Recurse -Force node_modules, package-lock.json
+npm install --save-dev nodemo

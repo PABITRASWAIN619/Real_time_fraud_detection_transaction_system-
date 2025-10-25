@@ -1,0 +1,127 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f5f7fa;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.menu {
+  list-style: none;
+  padding: 0;
+}
+.menu li {
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.menu li.active,
+.menu li:hover {
+  background-color: #334155;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-y: auto;
+}
+.dashboard-header h1 {
+  margin: 0;
+}
+.dashboard-header p {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* Cards */
+.stats-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.card {
+  flex: 1;
+  min-width: 200px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.card h3 {
+  font-size: 1rem;
+  color: #475569;
+}
+.card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.card.total { border-left: 5px solid #3b82f6; }
+.card.fraud { border-left: 5px solid #ef4444; }
+.card.legit { border-left: 5px solid #22c55e; }
+
+/* Chart */
+.chart-section {
+  background: white;
+  margin-top: 30px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table */
+.table-section {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.transaction-table th,
+.transaction-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.transaction-table th {
+  text-align: left;
+  background-color: #f1f5f9;
+}
+.status.fraud {
+  color: #dc2626;
+  font-weight: bold;
+}
+.status.legit {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.logout-btn {
+  color: #e63946;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+  color: #c1121f;
+}
+
