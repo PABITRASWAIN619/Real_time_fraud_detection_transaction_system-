@@ -125,3 +125,53 @@
   color: #c1121f;
 }
 
+.add-transaction {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-transaction form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.add-transaction input,
+.add-transaction select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  min-width: 120px;
+}
+
+.add-transaction button {
+  padding: 8px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-transaction button:hover {
+  background-color: #2563eb;
+}
+
+.status-pending {
+  color: #f59e0b; /* amber */
+  font-weight: bold;
+}
+
+.status-completed {
+  color: #16a34a; /* green */
+  font-weight: bold;
+}
+
+.status-failed {
+  color: #dc2626; /* red */
+  font-weight: bold;
+}

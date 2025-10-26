@@ -18,6 +18,7 @@ const SignUp = () => {
     email: "",
     phone: "",
     password: "",
+    role: "user",
   });
   const [errors, setErrors] = useState({});
 
@@ -181,6 +182,18 @@ const SignUp = () => {
                 <span className="error">{errors.password}</span>
               )}
             </div>
+            <div className="input-group">
+  <select
+    name="role"
+    value={formData.role}
+    onChange={handleChange}
+    className="role-select"
+  >
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+</div>
+
 
             <button type="submit" className="register-btn">
               Register

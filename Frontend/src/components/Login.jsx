@@ -22,16 +22,23 @@ const Login = ({ closePopup }) => {
       const data = await response.json();
 
       if (response.ok) {
-  alert(`✅ Welcome ${data.user.firstName}!`);
-  closePopup();
+        // ✅ Save user and token to localStorage
+        localStorage.setItem("user", JSON.stringify(data.user));
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
 
-  if (data.user.role === "admin") {
-    navigate("/Home");
-  } else {
-    navigate("/userdashboard");
-  }
-}
+        alert(`✅ Welcome ${data.user.firstName}!`);
+        closePopup();
 
+        if (data.user.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/userdashboard");
+        }
+      } else {
+        alert(`❌ ${data.message || "Login failed"}`);
+      }
     } catch (error) {
       console.error("Login error:", error);
       alert("⚠️ Error connecting to server");
