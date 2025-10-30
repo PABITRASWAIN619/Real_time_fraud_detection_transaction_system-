@@ -1,19 +1,42 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Material+Icons&display=swap");
 
-/* ---------- Page ---------- */
-.dashboard-page {
+/* ---------- Global Reset & Scroll Fix ---------- */
+html, body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
   font-family: "Poppins", sans-serif;
+}
+
+/* ---------- Page Container ---------- */
+.dashboard-page {
   background: linear-gradient(180deg, #d1f8ef, #a1e3fc);
-  min-height: 100vh;
   color: #333;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
+  display: block;
+  box-sizing: border-box;
+  padding-top: 80px; /* ✅ Prevent content hiding behind navbar */
 }
 
 /* ---------- Navbar ---------- */
 .navbar {
+  position: fixed; /* ✅ Fixed top navbar */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #3c36b5, #caa957);
+  background: linear-gradient(90deg, #2b60b0);
   padding: 1rem 2rem;
   color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -26,22 +49,28 @@
   font-size: 1.4rem;
   font-weight: 600;
 }
+.nav-link{
+  display: flex;
+  align-items: center;
+}
 
 .nav-btn {
-  background-color: #07209c;
-  color: #3674b5;
-  border: none;
+  background-color: rgb(0, 208, 255);
+  color: black;
+  /* border: 3px solid green; */
   padding: 0.6rem 1.3rem;
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: 15px;
+  font-weight: 1000;
   margin-left: 0.5rem;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
 }
+
 .nav-btn:hover {
-  background-color: #4536b5;
+  background-color: var(--primery);
   color: #fff;
-  box-shadow: 0 0 10px #a1e3fc;
+  box-shadow: 0 0 12px var(--accent);
+  
 }
 
 /* ---------- Hero Section ---------- */
@@ -49,11 +78,13 @@
   text-align: center;
   padding: 2.5rem 2rem;
 }
+
 .hero-text h1 {
   color: #3674b5;
   font-size: 2rem;
   margin-bottom: 0.8rem;
 }
+
 .hero-text p {
   color: #444;
   font-size: 1.1rem;
@@ -67,6 +98,7 @@
   justify-content: center;
   margin: 2rem 0;
 }
+
 .banner-image {
   width: 90%;
   border-radius: 16px;
@@ -76,7 +108,7 @@
   animation: fadeSlideUp 1.2s ease-out forwards;
 }
 
-/* ---------- Enhanced Stats Section ---------- */
+/* ---------- Stats Section ---------- */
 .stats-section {
   text-align: center;
   margin: 3rem 0;
@@ -149,23 +181,12 @@
   margin-top: 0.4rem;
 }
 
-.trend i {
-  font-size: 1rem;
-  margin-right: 4px;
-}
-
 .trend.positive {
   color: #2ecc71;
 }
 
 .trend.negative {
   color: #e77b3c;
-}
-
-.stats-footer {
-  margin-top: 1.8rem;
-  font-size: 0.9rem;
-  color: #555;
 }
 
 /* ---------- Chart Section ---------- */
@@ -176,17 +197,20 @@
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
 .chart-section h2 {
   text-align: center;
   color: #36b595;
   margin-bottom: 0.6rem;
 }
+
 .chart-description {
   text-align: center;
   color: #333;
   margin-bottom: 1.5rem;
   font-size: 1rem;
 }
+
 .chart-container {
   width: 100%;
   height: 300px;
@@ -198,17 +222,20 @@
   padding: 3rem 2rem;
   text-align: center;
 }
+
 .info-section h2 {
   color: #3697b5;
   font-size: 1.8rem;
   margin-bottom: 2rem;
 }
+
 .info-cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
 }
+
 .info-card {
   background: #fff;
   width: 300px;
@@ -217,49 +244,57 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
+
 .info-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
+
 .info-card img {
   width: 100%;
   height: 180px;
   object-fit: cover;
   border-radius: 10px;
 }
+
 .info-card h3 {
   color: #3674b5;
   margin-top: 1rem;
 }
+
 .info-card p {
   color: #555;
   font-size: 0.95rem;
   margin-top: 0.3rem;
 }
 
-/* ---------- Redesigned System Section ---------- */
+/* ---------- System Section ---------- */
 .system-section {
   background: linear-gradient(180deg, #a1e3fc, #d1f8ef);
   padding: 3rem 2rem;
   text-align: center;
 }
+
 .system-section h2 {
   color: #365eb5;
   font-size: 1.9rem;
   margin-bottom: 0.5rem;
 }
+
 .section-subtext {
   color: #333;
   max-width: 700px;
   margin: 0 auto 2rem auto;
   font-size: 1rem;
 }
+
 .system-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   justify-items: center;
 }
+
 .system-card {
   background: white;
   border-radius: 14px;
@@ -270,10 +305,12 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-top: 4px solid #36b5ad;
 }
+
 .system-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
+
 .system-icon {
   font-size: 2.2rem;
   color: #3654b5;
@@ -287,14 +324,12 @@
   color: white;
   padding: 3rem 2rem;
 }
+
 .contact-section h2 {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
 }
-.contact-section p {
-  margin-bottom: 2rem;
-  font-size: 1rem;
-}
+
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -303,6 +338,7 @@
   max-width: 500px;
   margin: 0 auto;
 }
+
 .contact-form input,
 .contact-form textarea {
   width: 100%;
@@ -312,10 +348,12 @@
   outline: none;
   font-size: 1rem;
 }
+
 .contact-form textarea {
   height: 120px;
   resize: none;
 }
+
 .contact-form button {
   background: #a1e3fc;
   color: #3674b5;
@@ -326,12 +364,12 @@
   cursor: pointer;
   transition: 0.3s ease;
 }
+
 .contact-form button:hover {
   background: white;
   color: #3674b5;
   box-shadow: 0 0 10px #a1e3fc;
 }
-
 
 /* ---------- Footer ---------- */
 .footer {

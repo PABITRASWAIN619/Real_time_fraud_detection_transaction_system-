@@ -1,22 +1,34 @@
-
-
-
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-// Middleware to verify JWT token
+dotenv.config();
+
+// 🟢 Middleware to verify JWT token
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  // Get token from Authorization header: "Bearer <token>"
+  const authHeader = req.header("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "No token provided" });
+    return res.status(401).json({ message: "No token, authorization denied" });
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
+    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decoded.id, role: decoded.role }; // attach user info to req
+
+    // Attach user info to request
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+    };
+
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+    console.error("JWT Error:", err);
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
+
+// Default export (can import either way)
+export default verifyToken;

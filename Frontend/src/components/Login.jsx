@@ -22,20 +22,25 @@ const Login = ({ closePopup }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ Save user and token to localStorage
-        localStorage.setItem("user", JSON.stringify(data.user));
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-        }
+        // Save user info and token
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: data.user.id,
+            loginId: data.user.loginId || data.user.email,
+            firstName: data.user.firstName,
+            role: data.user.role,
+          })
+        );
+
+        if (data.token) localStorage.setItem("token", data.token);
 
         alert(`✅ Welcome ${data.user.firstName}!`);
         closePopup();
 
-        if (data.user.role === "admin") {
-          navigate("/admindashboard");
-        } else {
-          navigate("/userdashboard");
-        }
+        // Redirect based on role
+        if (data.user.role === "user") navigate("/Userdashboard");
+        else navigate("/"); // normal user goes to home page
       } else {
         alert(`❌ ${data.message || "Login failed"}`);
       }
@@ -48,7 +53,9 @@ const Login = ({ closePopup }) => {
   return (
     <div className="login-overlay">
       <div className="login-popup">
-        <button className="close-btn" onClick={closePopup}>✖</button>
+        <button className="close-btn" onClick={closePopup}>
+          ✖
+        </button>
         <h2>Login</h2>
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -91,7 +98,9 @@ const Login = ({ closePopup }) => {
             </div>
           </div>
 
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn">
+            Login
+          </button>
 
           <p className="signup-text">
             Don’t have an account?{" "}

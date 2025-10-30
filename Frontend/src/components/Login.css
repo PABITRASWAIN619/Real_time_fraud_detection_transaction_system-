@@ -34,7 +34,7 @@
 }
 
 .login-popup h2 {
-  color: #3674b5;
+  color: #000000;
   text-align: center;
   margin-bottom: 1.2rem;
 }
@@ -54,7 +54,7 @@
 label {
   font-weight: 500;
   margin-bottom: 0.3rem;
-  color: #333;
+  color: #333333;
 }
 
 input,
@@ -109,9 +109,9 @@ select:focus {
 }
 
 .signup-text a {
-  color: #3674b5;
+  color: white;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .signup-text a:hover {

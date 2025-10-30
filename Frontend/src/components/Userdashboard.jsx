@@ -1,210 +1,292 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./UserDashboard.css";
 import {
-  BarChart,
-  Bar,
+  FaHome,
+  FaChartBar,
+  FaExchangeAlt,
+  FaCog,
+  FaTachometerAlt,
+  FaUserCircle,
+  FaExclamationTriangle,
+  FaTable,
+  FaSignOutAlt,
+  FaQuestionCircle,
+  FaUsers,
+  FaPlug,
+} from "react-icons/fa";
+import {
+  LineChart,
+  Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
-import "./Userdashboard.css";
 
-const Dashboard = () => {
+const merchants = ["Apple Store", "Pharmacy", "Walmart", "Amazon", "Netflix", "Paytm", "Flipkart"];
+const randomTransaction = () => ({
+  merchant: merchants[Math.floor(Math.random() * merchants.length)],
+  amount: (Math.random() * 1000).toFixed(2),
+  risk: (Math.random() * 1).toFixed(2),
+  status: Math.random() > 0.8 ? "Blocked ❌" : Math.random() > 0.6 ? "Flagged ⚠️" : "Safe ✅",
+});
+
+const UserDashboard = () => {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    totalTransactions: 0,
-    fraudCases: 0,
-    legitimate: 0,
-  });
-  const [transactions, setTransactions] = useState([]);
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("credit");
-  const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const [liveFeed, setLiveFeed] = useState([randomTransaction(), randomTransaction(), randomTransaction()]);
+  const [activeTab, setActiveTab] = useState("all");
+  const [showProfile, setShowProfile] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?._id;
-
-  // Fetch dashboard stats and recent transactions
+  // ===== Auto-update live feed =====
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res1 = await fetch("http://localhost:5000/api/dashboard/stats");
-        const res2 = await fetch(`http://localhost:5000/api/transactions/user/${userId}`);
+    const interval = setInterval(() => {
+      setLiveFeed((prev) => [randomTransaction(), ...prev.slice(0, 9)]);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-        const data1 = await res1.json();
-        const data2 = await res2.json();
-
-        setStats(data1);
-        setTransactions(data2);
-      } catch (err) {
-        console.error("Error fetching dashboard data", err);
-      }
-    };
-    fetchData();
-  }, [userId]);
-
+  // ===== Logout handler =====
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/home");
-  };
-
-  const handleAddTransaction = async (e) => {
-    e.preventDefault();
-    if (!amount || !type) return;
-    setLoading(true);
-    try {
-      const res = await fetch("http://localhost:5000/api/transactions/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId,
-          amount: Number(amount),
-          type,
-          description,
-        }),
-      });
-      if (!res.ok) throw new Error("Failed to add transaction");
-      const data = await res.json();
-      setTransactions([data.transaction, ...transactions]);
-      setAmount("");
-      setType("credit");
-      setDescription("");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to add transaction. Check console for details.");
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.clear();
+      navigate("/login");
     }
-    setLoading(false);
   };
 
-  const chartData = [
-    { name: "Week 1", fraud: 5, legit: 40 },
-    { name: "Week 2", fraud: 8, legit: 35 },
-    { name: "Week 3", fraud: 6, legit: 50 },
-    { name: "Week 4", fraud: 10, legit: 45 },
+  // ===== Sidebar menu click =====
+  const handleMenuClick = (menu, path) => {
+    navigate(path);
+  };
+
+  // ===== Sidebar active menu based on URL =====
+  const getActiveMenu = () => {
+    const path = location.pathname;
+    if (path.includes("/transactions")) return "transactions";
+    if (path.includes("/reports")) return "reports";
+    if (path.includes("/settings")) return "settings";
+    if (path.includes("/users")) return "users";
+    if (path.includes("/help")) return "help";
+    if (path.includes("/apis")) return "apis";
+    if (path.includes("/change-password")) return "change-password";
+    return "dashboard";
+  };
+
+  const stats = [
+    { title: "Total Transactions", value: "1,482", color: "#6366f1" },
+    { title: "Fraud Detections", value: "26", color: "#ef4444" },
+    { title: "Fraud Rate", value: "1.75%", color: "#facc15" },
+    { title: "Amount Processed", value: "$1.2M", color: "#22c55e" },
+    { title: "Amount Blocked", value: "$82K", color: "#f97316" },
+    { title: "Detection Accuracy", value: "98.9%", color: "#0ea5e9" },
   ];
+
+  const sampleTransactions = [
+    { id: "TXN001", timestamp: "2025-10-29 12:10", merchant: "Amazon", amount: "$120.50", location: "Odisha", method: "UPI", risk: "0.12", status: "Safe" },
+    { id: "TXN002", timestamp: "2025-10-29 12:25", merchant: "Walmart", amount: "$340.90", location: "Delhi", method: "Credit Card", risk: "0.75", status: "Flagged" },
+    { id: "TXN003", timestamp: "2025-10-29 12:40", merchant: "Pharmacy", amount: "$220.00", location: "Mumbai", method: "Debit Card", risk: "0.90", status: "Blocked" },
+  ];
+
+  const filteredTransactions =
+    activeTab === "flagged"
+      ? sampleTransactions.filter((t) => t.status === "Flagged")
+      : activeTab === "blocked"
+      ? sampleTransactions.filter((t) => t.status === "Blocked")
+      : sampleTransactions;
+
+  const fraudTrend = [
+    { day: "Mon", frauds: 2 },
+    { day: "Tue", frauds: 4 },
+    { day: "Wed", frauds: 3 },
+    { day: "Thu", frauds: 5 },
+    { day: "Fri", frauds: 7 },
+    { day: "Sat", frauds: 6 },
+    { day: "Sun", frauds: 3 },
+  ];
+
+  const riskDistribution = [
+    { name: "Low Risk", value: 65 },
+    { name: "Medium Risk", value: 25 },
+    { name: "High Risk", value: 10 },
+  ];
+  const COLORS = ["#22c55e", "#facc15", "#ef4444"];
 
   return (
     <div className="dashboard-container">
+      {/* ===== Sidebar ===== */}
       <aside className="sidebar">
-        <h2 className="logo">FraudGuard</h2>
+        <div className="user-profile top-profile" onClick={() => setShowProfile(!showProfile)}>
+          <FaUserCircle className="user-icon" />
+          <div>
+            <p className="user-name">Pabitra Swain</p>
+            <span className="user-role">Premium Member</span>
+          </div>
+        </div>
+
+        {showProfile && (
+          <div className="profile-popup">
+            <FaUserCircle className="popup-avatar" />
+            <h4>Pabitra Swain</h4>
+            <p>pabitraswain@example.com</p>
+            <button onClick={() => alert("Profile page coming soon!")}>View Profile</button>
+            <button onClick={() => alert("Settings page coming soon!")}>Settings</button>
+            <button className="logout-popup" onClick={handleLogout}>
+              <FaSignOutAlt /> Logout
+            </button>
+          </div>
+        )}
+
+        <h2 className="logo">SmartFraud</h2>
+
+        {/* ===== Menu ===== */}
         <ul className="menu">
-          <li className="active">Dashboard</li>
-          <li onClick={() => navigate("/transactions")}>Transactions</li>
-          <li onClick={() => navigate("/reports")}>Reports</li>
-          <li onClick={() => navigate("/settings")}>Settings</li>
-          <li onClick={handleLogout} className="logout-btn">Logout</li>
+          <li className={getActiveMenu() === "dashboard" ? "active" : ""} onClick={() => handleMenuClick("dashboard", "/userdashboard")}>
+            <FaTachometerAlt /> Dashboard
+          </li>
+          <li className={getActiveMenu() === "transactions" ? "active" : ""} onClick={() => handleMenuClick("transactions", "/transactions")}>
+            <FaExchangeAlt /> Transactions
+          </li>
+          <li className={getActiveMenu() === "reports" ? "active" : ""} onClick={() => handleMenuClick("reports", "/reports")}>
+            <FaChartBar /> Reports
+          </li>
+          <li className={getActiveMenu() === "help" ? "active" : ""} onClick={() => handleMenuClick("help", "/help")}>
+            <FaQuestionCircle /> Help & Support
+          </li>
+          <li className={getActiveMenu() === "users" ? "active" : ""} onClick={() => handleMenuClick("users", "/users")}>
+            <FaUsers /> Users
+          </li>
+          <li className={getActiveMenu() === "apis" ? "active" : ""} onClick={() => handleMenuClick("apis", "/apis")}>
+            <FaPlug /> APIs
+          </li>
+          <li className={getActiveMenu() === "settings" ? "active" : ""} onClick={() => handleMenuClick("settings", "/settings")}>
+            <FaCog /> Settings
+          </li>
+          <li className={getActiveMenu() === "change-password" ? "active" : ""} onClick={() => handleMenuClick("change-password", "/change-password")}>
+            <FaCog /> Change Password
+          </li>
         </ul>
+
+        <div className="logout-btn" onClick={handleLogout}>
+          <FaSignOutAlt className="logout-icon" />
+          <span>Logout</span>
+        </div>
       </aside>
 
+      {/* ===== Main Content ===== */}
       <main className="main-content">
-        <header className="dashboard-header">
-          <h1>Fraud Detection Dashboard</h1>
-          <p>Welcome back! Here’s your transaction summary.</p>
-        </header>
+        <div className="header">
+          <h2>Real-Time Fraud Detection Dashboard</h2>
+          <button className="add-btn">Add Transaction +</button>
+        </div>
 
-        {/* Stats Cards */}
-        <section className="stats-grid">
-          <div className="card total">
-            <h3>Total Transactions</h3>
-            <p>{stats.totalTransactions || transactions.length}</p>
-          </div>
-          <div className="card fraud">
-            <h3>Fraudulent Cases</h3>
-            <p>{stats.fraudCases || 0}</p>
-          </div>
-          <div className="card legit">
-            <h3>Legitimate</h3>
-            <p>{stats.legitimate || 0}</p>
-          </div>
-        </section>
+        {/* ===== Overview Cards ===== */}
+        <div className="overview-section">
+          {stats.map((stat, i) => (
+            <div key={i} className="overview-card" style={{ borderTop: `5px solid ${stat.color}` }}>
+              <h4 style={{ color: stat.color }}>{stat.title}</h4>
+              <p>{stat.value}</p>
+            </div>
+          ))}
+        </div>
 
-        {/* Chart Section */}
-        <section className="chart-section">
-          <h2>Weekly Fraud Analysis</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="fraud" fill="#e63946" name="Fraudulent" />
-              <Bar dataKey="legit" fill="#2a9d8f" name="Legitimate" />
-            </BarChart>
-          </ResponsiveContainer>
-        </section>
+        {/* ===== Graphs ===== */}
+        <div className="graph-section">
+          <div className="graph-box">
+            <h3>📈 Fraud Detection Trend</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={fraudTrend}>
+                <XAxis dataKey="day" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="frauds" stroke="#ef4444" strokeWidth={3} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
 
-        {/* Add Transaction Form */}
-        <section className="add-transaction">
-          <h2>Add New Transaction</h2>
-          <form onSubmit={handleAddTransaction}>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Amount"
-              required
-            />
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-              <option value="credit">Credit</option>
-              <option value="debit">Debit</option>
-            </select>
-            <input
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Description"
-            />
-            <button type="submit" disabled={loading}>
-              {loading ? "Adding..." : "Add Transaction"}
+          <div className="graph-box">
+            <h3>🧠 Risk Level Distribution</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie data={riskDistribution} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
+                  {riskDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                  ))}
+                </Pie>
+                <Legend />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* ===== Transactions ===== */}
+        <div className="transactions-frame">
+          <div className="tab-buttons">
+            <button className={activeTab === "all" ? "active" : ""} onClick={() => setActiveTab("all")}>
+              <FaTable /> All
             </button>
-          </form>
-        </section>
+            <button className={activeTab === "flagged" ? "active" : ""} onClick={() => setActiveTab("flagged")}>
+              <FaExclamationTriangle /> Flagged
+            </button>
+            <button className={activeTab === "blocked" ? "active" : ""} onClick={() => setActiveTab("blocked")}>
+              ❌ Blocked
+            </button>
+          </div>
 
-        {/* Transactions Table */}
-        <section className="table-section">
-          <h2>Recent Transactions</h2>
-          <table className="transaction-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.length > 0 ? (
-                transactions.map((txn) => (
-                  <tr key={txn._id}>
-                    <td>{txn._id}</td>
-                    <td>₹{txn.amount}</td>
-                    <td className={txn.type === "credit" ? "type-credit" : "type-debit"}>
-                      {txn.type}
-                    </td>
-                    <td className={`status ${txn.status.toLowerCase()}`}>
-                      {txn.status}
-                    </td>
-                    <td>{new Date(txn.date).toLocaleString()}</td>
-                  </tr>
-                ))
-              ) : (
+          <div className="transactions-section">
+            <table>
+              <thead>
                 <tr>
-                  <td colSpan="5" style={{ textAlign: "center" }}>
-                    No transactions found
-                  </td>
+                  <th>ID</th>
+                  <th>Time</th>
+                  <th>Merchant</th>
+                  <th>Amount</th>
+                  <th>Location</th>
+                  <th>Method</th>
+                  <th>Risk</th>
+                  <th>Status</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </section>
+              </thead>
+              <tbody>
+                {filteredTransactions.map((t, i) => (
+                  <tr key={i}>
+                    <td>{t.id}</td>
+                    <td>{t.timestamp}</td>
+                    <td>{t.merchant}</td>
+                    <td>{t.amount}</td>
+                    <td>{t.location}</td>
+                    <td>{t.method}</td>
+                    <td>{t.risk}</td>
+                    <td className={t.status === "Blocked" ? "negative" : t.status === "Flagged" ? "warning" : "positive"}>
+                      {t.status}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ===== Live Feed ===== */}
+        <div className="live-feed">
+          <h3>📡 Live Fraud Alert Feed</h3>
+          <ul>
+            {liveFeed.map((item, index) => (
+              <li key={index}>
+                <span className="merchant">{item.merchant}</span> — ${item.amount} — Risk:{" "}
+                <strong>{item.risk}</strong> — <span className="status">{item.status}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </main>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserDashboard;

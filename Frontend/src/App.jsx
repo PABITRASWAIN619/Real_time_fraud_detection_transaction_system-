@@ -5,6 +5,11 @@ import SignUp from "./components/SignUp";
 import Userdashboard from "./components/Userdashboard";
 import AdminDashboard from "./components/AdminDashboard";
 import UserTransactions from "./components/UserTransactions"; // ✅ import the new component
+import ChangePassword from "./components/ChangePassword";
+import Reports from "./components/Reports";
+import Settings from "./components/Settings";
+import Users from "./components/Users";
+
 
 function App() {
   return (
@@ -30,6 +35,13 @@ function App() {
 
         {/* Fallback for unknown routes */}
         <Route path="*" element={<Navigate to="/home" replace />} />
+
+        <Route path="/change-password" element={<ChangePassword />} />
+
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/users" element={<Users />} />
+
       </Routes>
     </Router>
   );
